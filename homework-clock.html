@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- fontawesome iconlink -->
+  <script src="https://kit.fontawesome.com/a0ac4dc4fb.js" crossorigin="anonymous"></script>  
+
+  <title>Document</title>
+  <style>
+    /* star */
+     *{
+      margin: 0px;
+      box-sizing: border-box;
+      padding: 0px;
+
+    }
+    .sec{
+      position: relative;
+      background: #000000; /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right, #434343, #000000); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right, #434343, #000000); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      min-height: 200vh;;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center top;
+      background-attachment: fixed;
+      
+      
+      
+    }
+    .box{
+      position: absolute;
+      /* color: #111; */
+      color: transparent;
+      width: 20px;
+      height: 20px;
+      z-index: 5;
+      /* background: #fff; */
+    }
+    .box::before{
+      content: '•';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+   
+    }
+    .box.animate{
+      color: rgb(255, 255, 255);
+      /* margin-right: 5px; */
+      text-shadow: 0 0 5px rgb(255, 255, 255),
+      0 0 20px rgb(255, 255, 255),
+      0 0 50px rgb(255, 255, 255);
+    }
+
+    /* clock */
+
+    .container{
+      width: 100%;
+      min-height: 200vh;
+    }
+    
+    #clock {
+    
+    width: 500px;
+    height: 500px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 15px rgba(255, 253, 208, 0.975));
+  
+    position: relative;
+    margin: 0 auto; /* 水平居中 */
+    top: calc(70vh ); /* 垂直居中：視窗高度一半*/
+    transform: translateY(-50%); /* 精確調整垂直位置 */
+    z-index: 11;
+
+  }
+
+    #clockContainer{
+      width: 100%;
+      height: 100%;
+      position: absolute; 
+      top: 0;
+      left: 0;
+      z-index: 11;
+      transform: rotate(90deg);
+    }
+
+    #HourDot {
+      width: 25%;
+      height: 10px;
+      background: rgb(0, 0, 0);
+      border-radius: 5px;
+      position: absolute;
+      left: 30%;
+      top: calc(50% - 5px); /* 修正垂直對齊 */
+      transform-origin: 100px center; /* 旋轉中心距左端 100px */
+    }
+    #MinDot {
+      width: 40%;
+      height: 10px;
+      background: rgb(0, 0, 0);
+      border-radius: 5px;
+      position: absolute;
+      left: 10%;
+     top: calc(50% - 5px); /* 修正垂直對齊 */
+      transform-origin: 200px center; /* 旋轉中心距左端 200px */
+    }
+    #secDot {
+      width: 40%;
+      height: 5px;
+      background: rgb(255, 221, 0);
+      border-radius: 5px;
+      position: absolute;
+      left: 10%;
+      top: calc(50% - 2.5px); /* 修正垂直對齊 */
+      transform-origin: 200px center; /* 旋轉中心距左端 200px */
+    }
+    #secDot::after {
+      content: '';
+      width: 30px;
+      height: 30px;
+      background: rgb(255, 221, 0);
+      border-radius: 50%;
+      position: absolute;
+      left: 15px;
+      top:-12px; /* 修正垂直對齊 */
+      transform-origin: 200px center;
+     
+    }
+
+    .img-animate{
+      position: absolute;
+      filter: drop-shadow(0 0 3px rgba(255, 253, 208, 0.975));
+      animation: float 4s ease-in-out infinite; 
+      z-index: 20;
+    }
+
+    .ye-position{
+      position: absolute;
+      top: 500px;
+      left: 350px;
+    }
+    .astronaut-position{
+      position: absolute;
+      top: 0px;
+      left: 1100px;
+    }
+
+     .sticker-position{
+      position: absolute;
+      top: 940px;
+      right: 10px;
+    }
+    /* #rocket {
+      position: absolute;
+      z-index: 20;
+      pointer-events: none;
+      transition: all 0.1s ease;
+    } */
+    
+
+    /*nothing font*/
+    p{
+      font-size: 20px;
+      color: #ffffff;
+      font-family: 'Nothing Font 5x7', sans-serif;
+    }
+    p#clockinside{
+      font-size: 40px;
+      color: rgb(255, 221, 0);
+      font-family: 'Nothing Font 5x7', sans-serif;
+      position: absolute;
+      top: 30px;
+      left: 0px;
+      transform: rotate(90deg);
+    }
+    
+    #clockContainer .dot{
+      position: absolute;
+      top: 247px;
+      left: 10px;
+      width: 10px;
+      height: 3px;
+      background: #353535;
+      border-radius: 30px;
+      /* CSS 自訂變數（Custom Property）
+      使用 CSS 變數動態設置背景，簡化管理和支持動態效果。
+      */
+     
+      transform-origin: 240px;
+      /* transform-origin 指定 CSS 變形
+      transform-origin: x-axis y-axis [z-axis];
+      若應用於旋轉（rotate），元素將以距離左邊 100px、垂直中心的位置為軸心旋轉。
+       */
+    }
+
+    /* 秒刻度運行中的背景色 */
+    #clockContainer .active.dot {
+     
+      background: rgb(255, 221, 0);
+      box-shadow: 0 0 10px rgb(255, 221, 0),
+                  0 0 20px rgb(255, 221, 0),
+                  0 0 30px rgb(255, 221, 0);
+      
+    }
+
+    #clockContainer .dot:nth-child(5n+5) {
+     width: 30px;
+     height: 8px;
+     border-radius: 30px;
+    }
+
+    #hourNumber{
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      top: 600px;
+      left: 40px;
+    }
+    #minNumber{
+      position: absolute;
+      top: 600px;
+      left: 210px;
+    }
+    #secNumber
+    {
+      position: absolute;
+      top: 600px;
+      left: 400px;
+    }
+    p#digitalClock{
+      font-size: 65px;
+    }
+    .hourNumber-p{
+      font-size: 30px;
+      z-index: 40;
+    }
+
+    .q1
+     {
+      width: 150px;
+
+      display: none;
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      background-color: #fff;
+      
+      padding: 10px;
+      border-radius: 5px;
+      
+      z-index: 25;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+      color: #000000;
+      font-family: 'Nothing Font 5x7', sans-serif;
+      font-size: 14px;
+    }
+
+    .ye-position:hover .q1 {
+      display: block;
+      animation: dialog-box 2s ease-in-out;
+    }
+    .q2{
+      width: auto;
+      display: none;
+      position: absolute;
+      top: 220px;
+      left: -50px;
+  
+      padding: 10px;
+      border-radius: 5px;
+      font-family: 'Nothing Font 5x7', sans-serif;
+      font-size: 14px;
+      z-index: 25;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    .astronaut-position:hover .q2 {
+      display: block;
+      animation: dialog-box 2s ease-in-out;
+    }
+
+    
+
+        /* 外星人漂浮動畫 */
+    @keyframes float {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        transform: translateX(-50%) translateY(-20px);
+      }
+    }
+
+   @font-face {
+      font-family: 'Nothing Font 5x7';
+      src: url('./font/nothing-font-5x7.otf') format('opentype');
+    }
+
+       
+    @keyframes dialog-box {
+      0% {
+        transform: translateX(-50%);
+        transform: scale(0%);
+      }
+  
+      100% {
+        transform: translateX(-50%);
+        transform: scale(100%);
+      }
+    }
+    
+  </style>
+</head>
+
+<body>
+  <section class="sec">
+
+   
+    
+
+    <p style="padding: 20px;">Clock Home Work</p>
+
+    <div class="container">
+
+      <div class="img-animate ye-position">
+        <img src="./img/yeeeeee.png" width="80px" height="80px" >
+        <div class="dialog-box q1">I wish you were here.</div>
+      </div>
+      <div class="img-animate astronaut-position">
+        <img src="./img/astronaut.png" width="350px" height="350px" >
+        <div class="dialog-box q2"><p>Can you hear me?</p></div>
+      </div>
+
+       <!-- <div>
+            <img src="./img/rocket.png" id="rocket" alt="" width="60px" height="auto">
+      </div> -->
+
+      <div id="clock">
+        
+        <div id="HourDot"></div>
+        <div id="MinDot"></div>
+        <div id="secDot"></div>
+        <div id="clockContainer"></div>
+
+        <div id="digitalClock">
+          <div id="hourNumber"></div>
+          
+          <div id="minNumber"></div>
+          <div id="secNumber"></div>
+         
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+  <script>
+
+    //parallax effect 視差效果
+    window.addEventListener('scroll',function(){
+      const scrollTop = document.documentElement.scrollTop;
+      document.querySelector('.sec').style.backgroundPositionY = `-${scrollTop * 0.3}px`;
+      document.querySelectorAll('.box').forEach(function(box){
+        const speed=parseFloat(box.dataset.speed);
+        box.style.transform = `translateX(${scrollTop * speed}px)`;
+        box.style.transform = `translateY(${scrollTop * speed}px)`;
+      });
+    });
+
+      // 響應式調整星星位置
+    // window.addEventListener('resize', () => {
+    //   document.querySelectorAll('.box').forEach(box => {
+    //     box.style.left = Math.random() * innerWidth + 'px';
+    //   });
+    // });
+
+
+    //動態調整背景的漸層色
+    // const updateBackground = () => {
+    // const hour = new Date().getHours();
+    // const sec = document.querySelector('.sec');
+    //   if (hour >= 6 && hour < 18) {
+    //     sec.style.setProperty('--clr', 'linear-gradient(to right, #6b7280, #d1d5db)');
+    //   } else {
+    //     sec.style.setProperty('--clr', 'linear-gradient(to right, #434343, #000000)');
+    //   }
+    // };
+    // setInterval(updateBackground, 60000);
+    // updateBackground();
+
+    //clock
+   
+
+   
+
+    //時鐘刻度
+    function clock(){
+
+      const HourDot= document.getElementById('HourDot')
+      const MinDot = document.getElementById('MinDot')
+      let secDot = document.getElementById('secDot')
+      
+
+      let date = new Date()
+      let hours = date.getHours()
+      let minutes = date.getMinutes()
+      let seconds = date.getSeconds()
+      
+
+
+      HourDot.style.transform = `rotate(${hours  * 30 + 90}deg)`
+      MinDot.style.transform = `rotate(${minutes * 6 + 90}deg)`
+      secDot.style.transform = `rotate(${seconds * 6 + 90}deg)`
+      
+      //為什麼要事件監聽document.addEventListener
+
+      //數字顯示時間
+      const digitalClock = document.getElementById('digitalClock')
+      const secNumber = document.getElementById('secNumber')
+      const minNumber = document.getElementById('minNumber')
+      const hourNumber = document.getElementById('hourNumber')
+      
+      secNumber.innerHTML =`<p id="digitalClock"> ${seconds} </p> <p>second</p>`;
+      minNumber.innerHTML =`<p id="digitalClock"> ${minutes} </p> <p>minute</p>`;
+      hourNumber.innerHTML =`<p id="digitalClock"> ${hours} </p> <p>hour</p>`;
+     
+      //這個是時鐘內的秒數數字
+      secDot.innerHTML =`<p id="clockinside"> ${seconds} </p>`;
+
+
+      //時鐘刻度
+      let secondsDot = '';
+
+      for(let e =1; e<61 ; e++){
+
+        let rotation = e * 6; //讓每個刻度旋轉6度
+        if(e === seconds){
+        secondsDot += 
+        '<div class="dot active" style="transform:rotate('+rotation+'deg)"></div>';}
+        //刻度進行時active元素獲得焦點時設定其樣式
+        else{
+        secondsDot += 
+        '<div class="dot" style="transform:rotate('+rotation+'deg)"></div>';
+        }
+      }
+      const clockContainer = document.getElementById('clockContainer')
+      clockContainer.innerHTML = secondsDot ;
+
+    }  setInterval(clock, 1000)
+        clock()
+   
+
+    // star
+    for(let i = 1 ; i <= 100 ; i++){
+      let sizeW = Math.random()*10;//隨機大小
+
+      let box = document.createElement('div');//先創建div元素
+      box.classList.add('box');//為該元素添加box類，應用星星的樣式喔
+      
+      //跟打殭屍遊戲一樣的隨機定位，innerWidth是視窗的寬度，老師上次px單位忘記加
+      box.style.left = Math.random()* innerWidth + 'px'
+      box.style.top = Math.random()* innerHeight + 'px'
+
+      //基本大小為10px 加上隨機增加大小(139) 最後的範圍在10px~20px(fontsize)
+      box.style.fontSize = 10 + sizeW + 'px'
+
+        // 添加視差速度（隨機速度模擬深度）
+      box.dataset.speed = Math.random() * 0.7 + 0.1; // 速度範圍 0.1 到 0.6
+
+      //把在'box'裡的 星星 抓到 瀏覽器 '.sec' 顯示
+      document.querySelector('.sec').appendChild(box);
+    }
+
+    //每0.5秒 執行涵式裡的動作
+    setInterval(animateBox,1000)
+
+    function animateBox(){
+      //找到50個星星容器(box)
+      let boxes = document.querySelectorAll('.box')
+      //生成0~49個隨機整數，作為星星索引
+     for (let i = 0; i < 4; i++) { // 每次影響 4 個星星
+      let num = Math.floor(Math.random() * boxes.length);
+      boxes[num].classList.toggle('animate');
+      }
+    }
+
+  //   const rocket = document.querySelector('#rocket')
+
+  //   //讓火箭跟著鼠標動
+    
+  //    let mouseLook = function(e){
+  //   // console.log(e.clientX,e.clientY)
+  //   rocket.style.left = e.clientX   +'px'
+  //   rocket.style.top = e.clientY   +'px'
+  // };
+  
+  // document.addEventListener("pointermove",mouseLook);
+
+  </script>
+</body>
+</html>
